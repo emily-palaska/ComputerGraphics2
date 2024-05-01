@@ -1,28 +1,22 @@
 import numpy as np
 
 def lookat(eye: np.ndarray, up: np.ndarray, target: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-# Calculate the camera's view matrix (i.e., its coordinate frame transformation specified
-# by a rotation matrix R, and a translation vector t).
-# :return a tuple containing the rotation matrix R (3 x 3) and a translation vector t (1 x 3)
-    
+# Calculate the camera's view matrix (i.e., its coordinate frame transformation specified by a rotation matrix R,
+# and a translation vector t).
+#  Input:
+#    eye: 1x3 np vector specifying the point of the camera
+#    up: 1x3 np vector for the up vector
+#    target: 1x3 np vector for the 
+#  Output:
+#    R: 3x3 np rotation matrix
+#    t: 1x3 np translation vector
+
     # Calculate the three normalized camera vectors
-    zc = target - eye
+    zc = target.T - eye.T
     zc = zc / np.linalg.norm(zc)
-    yc = up - np.dot(up, zc) * zc
+    yc = up.T - np.dot(up.T[0], zc[0]) * zc
     yc = yc / np.linalg.norm(yc)
-    xc = np.cross(yc, zc)
+    xc = np.cross(yc[0], zc[0])
     xc = xc / np.linalg.norm(xc)
-
     # Add them to the rotation matrix and return the resutls
-    R = np.array([xc, yc, zc])
-    return (R.T, eye)
-
-# Exmaple usage
-if __name__ == "__main__":
-    eye = np.array([15, 15, 1.5])
-    target = np.array([30, 30, 4])
-    up = np.array([0, 0, 1])
-    
-    (R, t) = lookat(eye, up, target)
-    print(t)
-    print(R)
+    return (np.array([xc, yc[0], zc[0]]).T, eye)

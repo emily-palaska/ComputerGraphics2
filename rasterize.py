@@ -13,9 +13,3 @@ def rasterize(pts_2d: np.ndarray, plane_w: int, plane_h: int, res_w: int, res_h:
     
     # Apply and return rasterization
     return np.round((pts_2d + offset) * ratio).astype(int)
-
-# Example usage
-if __name__ == "__main__":
-    pts_2d = np.array([[4, 3.9], [4, 4]])
-    pts_ras = rasterize(pts_2d, 10, 10, 5, 5)
-    print(pts_ras)
