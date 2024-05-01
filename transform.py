@@ -21,7 +21,7 @@ class Transform:
             [0, 0, 0, 1]
         ])
         
-        self.mat = np.round(R @ self.mat, decimals = 3)
+        self.mat = R @ self.mat
 
     def translate(self, t: np.ndarray) -> None:
         # translate the transformation matrix.
@@ -44,6 +44,7 @@ class Transform:
 
         return transformed_pts[:, :-1]
 
+# Example usage
 if __name__ == "__main__":
     # Initialize affine transform
     transformExample = Transform()
