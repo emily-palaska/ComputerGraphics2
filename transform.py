@@ -1,14 +1,18 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 class Transform:
-    # Interface for performing affine transformations.
+# Interface to implement an Affine Transformation (rotation + translation)
     def __init__(self):
         # Initialize a Transform object.
         self.mat = np.eye(4)
 
     def rotate(self, theta: float, u: np.ndarray) -> None:
-        # rotate the transformation matrix
+    # Perform a rotation by an angle along an axis
+    #  Input:
+    #    theta: the angle of rotation (clockwise and in rads)
+    #    u: the normalized vector of the rotation axis
+    
+        # Extract cosine, sine and coordinates of u
         c = np.cos(-theta)
         s = np.sin(-theta)
         ux, uy, uz = u
@@ -20,26 +24,27 @@ class Transform:
             [uz*ux*(1-c) - uy*s, uz*uy*(1-c) + ux*s, c + uz**2*(1-c), 0],
             [0, 0, 0, 1]
         ])
-        
+        # Rotate the transformation matrix
         self.mat = R @ self.mat
 
     def translate(self, t: np.ndarray) -> None:
-        # translate the transformation matrix.
-        translation_matrix = np.eye(4)
-        translation_matrix[:3, 3] = t  # Update the translation part of the matrix
-        self.mat = np.round(translation_matrix @ self.mat, decimals = 3)
+    # Perform a translation by a vector
+    #  Input:
+    #    t: the np vector of translation with form [x, y, z]
+        
+        # Update the translation part of the matrix
+        self.mat[:3, 3] += t.T
 
     def transform_pts(self, pts: np.ndarray) -> np.ndarray:
-        # transform the specified points
-        # according to our current matrix.
-        
-        # Add homogeneous coordinates to the points
-        pts_homo = np.hstack([pts, np.ones((pts.shape[0], 1))])
-
-        # Transform the points using the current transformation matrix
-        transformed_pts = np.dot(self.mat, pts_homo.T).T
-
-        # Convert back to Cartesian coordinates
-        transformed_pts[:, :-1] /= transformed_pts[:, -1][:, np.newaxis]
-
-        return transformed_pts[:, :-1]
+    # Apply the Affine transformation to certain points
+    #  Input:
+    #    pts: the points to be transformed as a Nx3 np array
+    #  Output:
+    #    transformed_pts: the points after applying the transformation as an Nx3 np array
+    
+        # Turn to homogenus coordinates by adding a row of ones to the points.
+        ones_row = np.ones((1, pts.shape[1]))
+        pts_homo = np.vstack([pts, ones_row])
+        # Transform the specified points according to our current matrix and return the result.
+        tranformed_pts = self.mat @ pts_homo
+        return tranformed_pts[:3, :]

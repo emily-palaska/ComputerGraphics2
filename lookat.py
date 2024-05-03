@@ -1,8 +1,7 @@
 import numpy as np
 
 def lookat(eye: np.ndarray, up: np.ndarray, target: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-# Calculate the camera's view matrix (i.e., its coordinate frame transformation specified by a rotation matrix R,
-# and a translation vector t).
+# Calculate the camera's view matrix ,i.e. its coordinate frame transformation
 #  Input:
 #    eye: 1x3 np vector specifying the point of the camera
 #    up: 1x3 np vector for the up vector
