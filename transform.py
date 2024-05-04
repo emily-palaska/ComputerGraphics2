@@ -48,9 +48,3 @@ class Transform:
         # Transform the specified points according to our current matrix and return the result.
         tranformed_pts = self.mat @ pts_homo
         return tranformed_pts[:3, :]
-
-if __name__ == "__main__":
-    trans = Transform()
-    trans.translate(np.array([0,0,1]))
-    pts = np.array([[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]])
-    print(trans.transform_pts(pts))
