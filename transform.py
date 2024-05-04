@@ -42,9 +42,15 @@ class Transform:
     #  Output:
     #    transformed_pts: the points after applying the transformation as an Nx3 np array
     
-        # Turn to homogenus coordinates by adding a row of ones to the points.
+        # Turn to homogeneous coordinates by adding a row of ones to the points.
         ones_row = np.ones((1, pts.shape[1]))
         pts_homo = np.vstack([pts, ones_row])
         # Transform the specified points according to our current matrix and return the result.
         tranformed_pts = self.mat @ pts_homo
         return tranformed_pts[:3, :]
+
+if __name__ == "__main__":
+    trans = Transform()
+    trans.translate(np.array([0,0,1]))
+    pts = np.array([[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]])
+    print(trans.transform_pts(pts))

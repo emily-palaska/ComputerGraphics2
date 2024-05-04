@@ -30,5 +30,5 @@ def render_object(v_pos, v_clr, t_pos_idx, plane_h, plane_w, res_h, res_w, focal
     # Convert the plane to image pixels
     vertices = rasterize(pts_2d, plane_w, plane_h, res_w, res_h).T
     
-    # Render the image with Gouraud shadings
+    # Render the image with Gouraud shading
     return render_img(t_pos_idx, vertices, v_clr, depth, 'g')

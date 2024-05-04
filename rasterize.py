@@ -11,10 +11,15 @@ def rasterize(pts_2d: np.ndarray, plane_w: int, plane_h: int, res_w: int, res_h:
 #  Output:
 #    pts_rast: Nx2 np array of the points with pixel coordinates
 
-    # Handle exception of points outside of plane
+    # Remove any points outside of the camera plane
     if np.any((pts_2d[0] < -plane_w/2) | (pts_2d[0] > plane_w/2)) or np.any((pts_2d[1] < -plane_h/2) | (pts_2d[1] > plane_h/2)):
-        print("Invalid points, out of plane")
-        return None
+        print("Some points were out of the camera plane")
+        x_mask = np.logical_and(pts_2d[0] >= -plane_w/2, pts_2d[0] <= plane_w/2)
+        y_mask = np.logical_and(pts_2d[1] >= -plane_h/2, pts_2d[1] <= plane_h/2)
+        final_mask = np.logical_and(x_mask, y_mask)
+        print(pts_2d.shape)
+        pts_2d = pts_2d[:, final_mask]
+        print(pts_2d.shape)
     
     # Calculate rasterization ratio and offset
     ratio = np.array([[(res_w - 1) / plane_w], [(res_h - 1) / plane_h]])
